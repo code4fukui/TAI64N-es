@@ -24,12 +24,10 @@ class TAI64N {
       nsec = (t - sec * 1000) * 1000 * 1000;
     }
     const offset = TAI64N.getOffsetByLeap(sec);
-    console.log({offset, sec})
     sec += offset;
 
     const hexsec = fix0(sec.toString(16), 16);
     const hexnsec = fix0(nsec.toString(16), 8);
-    console.log(hexsec, hexnsec);
     const res = new Uint8Array(12);
     const binsec = hex.toBin(hexsec);
     for (let i = 0; i < 8; i++) {
@@ -83,7 +81,6 @@ class TAI64N {
   }
   static getOffsetByLeap(sec) {
     let offset = 10 + leapSeconds.length;
-    //console.log("max offset", offset - 1);
     for (const l of leapSeconds) {
       offset--;
       if (sec > l) {

@@ -1,7 +1,5 @@
 import * as t from "https://deno.land/std/testing/asserts.ts";
 import { TAI64N } from "./TAI64N.js";
-import { hex } from "https://code4sabae.github.io/js/hex.js";
-
 
 Deno.test("parse", () => {
   const chk = (stai64n, sdate) => {
@@ -65,18 +63,3 @@ Deno.test("lt gt eq 2", () => {
   t.assert(TAI64N.eq(b1, b1));
   t.assert(TAI64N.eq(b2, b2));
 });
-
-/*
-//console.log(TAI64N.encode(0, 0))
-//console.log(TAI64N.stringify(TAI64N.encode(new Date())));
-const b = TAI64N.encode(new Date("1970-01-01T00:00:00.000Z"));
-console.log(b);
-const [sec, nsec] = TAI64N.decode(b);
-console.log({sec, nsec});
-const s = TAI64N.stringify(b);
-console.log(s);
-const b2 = TAI64N.parse(s);
-console.log(b2);
-const d = TAI64N.toDate(b2);
-console.log(d);
-*/

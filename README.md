@@ -5,13 +5,18 @@
 - [TAI64N](https://cr.yp.to/libtai/tai64.html)は、1970年1月1日からの秒とナノ秒を12byteのバイナリ、または、"@" を先頭に付けた、hexでの文字列で表現する (ナノ秒 1000 * 1000 * 1000 = 0x3b9aca00)
 ## how to use
 
-```
+```js
 import { TAI64N } from "https://code4fukui.github.io/TAI64N-es/TAI64N.js";
 
 console.log(TAI64N.now());
 console.log(TAI64N.parse("@4000000061bd24a6000f4240"));
 ```
 
+## test
+
+```bash
+deno test
+```
 ## caution!
 
 - unsupported before 1970-01-01 (1970年1月1日以前の時刻表記に非対応)
