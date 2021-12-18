@@ -22,3 +22,7 @@ deno test
 
 - unsupported before 1970-01-01 (1970年1月1日以前の時刻表記に非対応)
 - maintain leapSeconds.js if appear new leap second (閏秒が発表された時、leapSecond.js を更新する運用が必要)
+
+## links
+
+- [日本標準時プロジェクト　Information of Leap second](https://jjy.nict.go.jp/QandA/data/leapsec.html)
