@@ -1,8 +1,9 @@
 # TAI64N-es
- 
-- TAI(Temps Atomique International, 国際原子時)とは、セシウムを利用した原子時計によって計測される時刻系
+
+- [TAI64N](https://cr.yp.to/libtai/tai64.html)のJavaScript実装 (ES Modules for browsers and Deno)
+- [TAI64N](https://cr.yp.to/libtai/tai64.html)は、TAIを1970年1月1日からの秒とナノ秒を12byteのバイナリ、または、"@" を先頭に付けた、hexでの文字列で表現するフォーマット (ナノ秒 1000 * 1000 * 1000 = 0x3b9aca00)
+- [TAI](https://ja.wikipedia.org/wiki/%E5%9B%BD%E9%9A%9B%E5%8E%9F%E5%AD%90%E6%99%82)(Temps Atomique International, 国際原子時)とは、セシウムを利用した原子時計によって計測される時刻系
 - TAIによって刻まれる時刻は、原子時は地球上で最も正確な時刻
-- [TAI64N](https://cr.yp.to/libtai/tai64.html)は、1970年1月1日からの秒とナノ秒を12byteのバイナリ、または、"@" を先頭に付けた、hexでの文字列で表現する (ナノ秒 1000 * 1000 * 1000 = 0x3b9aca00)
 ## how to use
 
 ```js
