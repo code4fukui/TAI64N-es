@@ -1,0 +1,46 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width">
+<title>DATE2TAI64N</title>
+</head><body>
+
+<h1>DATE2TAI64N</h1>
+
+DATE<br>
+<input id=date><br>
+TAI64N<br>
+<input id=tai64n><br>
+
+<hr>
+<a href=https://github.com/code4fukui/TAI64N-es>TAI64N-es src on GitHub</a>
+
+<script type="module">
+import { TAI64N } from "./TAI64N.js";
+
+onload = () => {
+  date.oninput = () => {
+    try {
+      console.log(date.value);
+      tai64n.value = TAI64N.stringify(TAI64N.encode(new Date(date.value)));
+    } catch (e) {
+      tai64n.value = e;
+    }
+  };
+  tai64n.oninput = () => {
+    try {
+      date.value = TAI64N.toDate(TAI64N.parse(tai64n.value));
+    } catch (e) {
+      date.value = e;
+    }
+  };
+
+  date.value = new Date().toString();
+  date.oninput();
+};
+</script>
+
+<style>
+input {
+  width: 30em;
+}
+</style>
+
+</body></html>
