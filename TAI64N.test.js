@@ -79,3 +79,25 @@ Deno.test("long term", () => { // * 1 year = 365 day
   chk(4300n * 10000n * 10000n, "@fc3080a830cbb12500000000"); // 4300億年後 ほぼ最大値
   chk(-1400n * 10000n * 10000n, "@02baa07493ddb10a00000000"); // -1400億年後 ほぼ最小値
 });
+
+Deno.test("TAI64ND", () => {
+  // 1716852935.558
+  const tai64n = TAI64N.parse("1716852935.558");
+  const s = TAI64N.toString(tai64n);
+  t.assertEquals(s, "1716852935.558");
+});
+Deno.test("TAI64ND only sec", () => {
+  const tai64n = TAI64N.parse("1716852935");
+  const s = TAI64N.toString(tai64n);
+  t.assertEquals(s, "1716852935");
+});
+Deno.test("TAI64ND long nano", () => {
+  const tai64n = TAI64N.parse("1716852935.123456789");
+  const s = TAI64N.toString(tai64n);
+  t.assertEquals(s, "1716852935.123456789");
+});
+Deno.test("TAI64ND too long nano", () => {
+  const tai64n = TAI64N.parse("1716852935.1234567891");
+  const s = TAI64N.toString(tai64n);
+  t.assertEquals(s, "1716852935.123456789");
+});

@@ -20,9 +20,11 @@ class TAI64N {
       sec = Math.floor(t / 1000);
       nsec = (t - sec * 1000) * 1000 * 1000;
       sec = BigInt(sec);
+    } else if (!(sec instanceof BigInt)) {
+      sec = BigInt(sec);
     }
     const offset = TAI64N.getOffsetByLeap(sec);
-    sec += 0x4000000000000000n + offset;
+    sec += 0x4000000000000000n + BigInt(offset);
 
     const hexsec = fix0(sec.toString(16), 16);
     const hexnsec = fix0(nsec.toString(16), 8);
@@ -54,18 +56,49 @@ class TAI64N {
     const offset = TAI64N.getOffsetByLeap(sec);
     return [sec - offset, nsec];
   }
-  static parse(s) { // @400xxx -> tai64n Uint8Array 12 bytes
-    if (!s || s.length != 25 || s[0] != "@") {
-      return null;
+  static parse(s) { // @400xxx or 1716852935.558 -> tai64n Uint8Array 12 bytes
+    if (!s) return null;
+    if (s.length == 25 && s[0] == "@") {
+      const sec = BigInt("0x" + s.substring(1, 1 + 16)) - 0x4000000000000000n;
+      const nsec = parseInt(s.substring(1 + 16, 1 + 16 + 8), 16);
+      const offset = TAI64N.getOffsetByLeap(sec);
+      return TAI64N.encode(sec - offset, nsec);
     }
-    const sec = BigInt("0x" + s.substring(1, 1 + 16)) - 0x4000000000000000n;
-    const nsec = parseInt(s.substring(1 + 16, 1 + 16 + 8), 16);
-    const offset = TAI64N.getOffsetByLeap(sec);
-    return TAI64N.encode(sec - offset, nsec);
+    // 1716852935.558
+    const n = s.indexOf(".");
+    if (n < 0) {
+      return TAI64N.encode(parseInt(s), 0);
+    }
+    const sec = parseInt(s.substring(0, n));
+    let ns = s.substring(n + 1);
+    if (ns.length > 9) {
+      ns = ns.substring(0, 9);
+    } else {
+      ns = ns + "00000000".substring(0, 9 - ns.length);
+    }
+    const nanosec = parseInt(ns);
+    return TAI64N.encode(sec, nanosec);
   }
   static stringify(tai64n) {
     TAI64N.check(tai64n);
     return "@" + fix0(hex.fromBin(tai64n), 24);
+  }
+  static toString(tai64n) {
+    TAI64N.check(tai64n);
+    const omit0 = (n) => {
+      if (!n) return "";
+      const s0 = "00000000" + n;
+      const s = s0.substring(s0.length - 9);
+      let m = s.length;
+      while (s[--m] === "0");
+      if (m < 0) {
+        return "." + s;
+      }
+      return "." + s.substring(0, m + 1);
+    };
+    tai64n ||= TAI64N.now();
+    const t = TAI64N.decode(tai64n);
+    return t[0] + omit0(t[1]);
   }
   static toDate(tai64n) {
     TAI64N.check(tai64n);
