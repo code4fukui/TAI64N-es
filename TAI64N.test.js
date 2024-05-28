@@ -85,11 +85,15 @@ Deno.test("TAI64ND", () => {
   const tai64n = TAI64N.parse("1716852935.558");
   const s = TAI64N.toString(tai64n);
   t.assertEquals(s, "1716852935.558");
+  t.assertEquals(TAI64N.stringify(tai64n), "@40000000665518ec21426780");
+  t.assertEquals(TAI64N.toDate(tai64n), new Date("2024-05-27T23:35:35.558Z"));
 });
 Deno.test("TAI64ND only sec", () => {
   const tai64n = TAI64N.parse("1716852935");
   const s = TAI64N.toString(tai64n);
   t.assertEquals(s, "1716852935");
+  t.assertEquals(TAI64N.stringify(tai64n), "@40000000665518ec00000000");
+  t.assertEquals(TAI64N.toDate(tai64n), new Date("2024-05-27T23:35:35.000Z"));
 });
 Deno.test("TAI64ND long nano", () => {
   const tai64n = TAI64N.parse("1716852935.123456789");
