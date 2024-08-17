@@ -18,7 +18,11 @@ class TAI64N {
       return tai;
     }
     series++;
-    return TAI64N.encode(bksec, bknsec + series);
+    if (series == 1000) {
+      series = 0;
+    }
+    const rnd = Math.floor(Math.random() * 1000);
+    return TAI64N.encode(bksec, bknsec + series * 1000 + rnd);
   }
   static check(tai64n) {
     if (!(tai64n instanceof Uint8Array)) {

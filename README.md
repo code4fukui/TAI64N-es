@@ -13,7 +13,7 @@ import { TAI64N } from "https://code4fukui.github.io/TAI64N-es/TAI64N.js";
 console.log(TAI64N.now());
 console.log(TAI64N.parse("@4000000061bd24a6000f4240"));
 ```
-* TAI64N.now() は、インスタンス内でユニークになります（同一msecでnanosecをインクリメント）
+* TAI64N.now() は、インスタンス内でユニークになります（同一msecの時、microsecをインクリメント、nanosecをランダムで埋める）
 
 ## test
 
