@@ -5,7 +5,7 @@
 <h1>DATE2TAI64N</h1>
 
 DATE<br>
-<input id=date><br>
+<input type=datetime-local id=date><br>
 TAI64N<br>
 <input id=tai64n><br>
 
@@ -14,6 +14,7 @@ TAI64N<br>
 
 <script type="module">
 import { TAI64N } from "./TAI64N.js";
+import { DateTime } from "https://js.sabae.cc/DateTime.js";
 
 onload = () => {
   date.oninput = () => {
@@ -26,13 +27,14 @@ onload = () => {
   };
   tai64n.oninput = () => {
     try {
-      date.value = TAI64N.toDate(TAI64N.parse(tai64n.value));
+      const d = TAI64N.toDate(TAI64N.parse(tai64n.value));
+      date.value = new DateTime(d).toStringLocal();
     } catch (e) {
       date.value = e;
     }
   };
 
-  date.value = new Date().toString();
+  date.value = new DateTime().toStringLocal();
   date.oninput();
 };
 </script>
