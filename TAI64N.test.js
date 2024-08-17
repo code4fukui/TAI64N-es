@@ -105,3 +105,29 @@ Deno.test("TAI64ND too long nano", () => {
   const s = TAI64N.toString(tai64n);
   t.assertEquals(s, "1716852935.123456789");
 });
+Deno.test("TAI64ND with e", () => {
+  const tai64n = TAI64N.parse("171e7");
+  const s = TAI64N.toString(tai64n);
+  t.assertEquals(s, "1710000000");
+  t.assertEquals(TAI64N.toDate(tai64n), new Date("2024-03-09T16:00:00.000Z"));
+});
+Deno.test("TAI64ND with e 2", () => {
+  const tai64n = TAI64N.parse("172e7");
+  const s = TAI64N.toString(tai64n);
+  t.assertEquals(s, "1720000000");
+  t.assertEquals(TAI64N.toDate(tai64n), new Date("2024-07-03T09:46:40.000Z"));
+});
+Deno.test("now is unique", () => {
+  const list = new Array(10);
+  for (let i = 0; i < 10; i++) {
+    list[i] = TAI64N.now();
+  }
+  /*
+  console.log(list[0]);
+  console.log(TAI64N.decode(list[0]));
+  */
+  for (let i = 1; i < 10; i++) {
+    const dt = TAI64N.decode(list[i - 1])[1] - TAI64N.decode(list[i])[1];
+    t.assert(dt != 0);
+  }
+});

@@ -2,9 +2,23 @@ import { hex } from "https://code4sabae.github.io/js/hex.js";
 import { fix0 } from "https://js.sabae.cc/fix0.js";
 import { leapSeconds } from "./leapSeconds.js";
 
+// to make now unique
+let bksec = 0;
+let bknsec = 0;
+let series = 0;
+
 class TAI64N {
   static now() { // ret: 12byte Uint8Array
-    return TAI64N.encode(new Date());
+    const tai = TAI64N.encode(new Date());
+    const ss = TAI64N.decode(tai);
+    if (bksec != ss[0] || bknsec != ss[1]) {
+      series = 0;
+      bksec = ss[0];
+      bknsec = ss[1];
+      return tai;
+    }
+    series++;
+    return TAI64N.encode(bksec, bknsec + series);
   }
   static check(tai64n) {
     if (!(tai64n instanceof Uint8Array)) {
@@ -14,11 +28,11 @@ class TAI64N {
       throw new Error("is not length 12 bytes");
     }
   }
-  static encode(sec, nsec) {
+  static encode(sec, nsec = 0) {
     if (sec instanceof Date) {
       const t = sec.getTime();
       sec = Math.floor(t / 1000);
-      nsec = (t - sec * 1000) * 1000 * 1000;
+      nsec += (t - sec * 1000) * 1000 * 1000;
       sec = BigInt(sec);
     } else if (!(sec instanceof BigInt)) {
       sec = BigInt(sec);
@@ -63,6 +77,13 @@ class TAI64N {
       const nsec = parseInt(s.substring(1 + 16, 1 + 16 + 8), 16);
       const offset = TAI64N.getOffsetByLeap(sec);
       return TAI64N.encode(sec - offset, nsec);
+    }
+    // 171e7
+    if (s.indexOf("e") >= 0) {
+      const f = parseFloat(s);
+      const sec = Math.floor(f);
+      const nanosec = (f - Math.floor(f)) * (1000 * 1000 * 1000);
+      return TAI64N.encode(sec, nanosec);
     }
     // 1716852935.558
     const n = s.indexOf(".");
